@@ -1,90 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   
-
+  <meta name="keywords" content="网站关键字">
+  <meta name="description" content="网站简介">
   
-  <title>linux学习笔记/管道符，重定向和环境变量 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="管道符，重定向和环境变量 命令行的通配符：如果只记得文件开头的几个字母，可以遍历查找以这几个字开头的文件，则就可已缩小文件的浏览范围，快速找到要找的文件。 通配符： 1234* 空值或者无限? 单个字符（只匹配一个字符，不能是空值，也不能是多个[0-9] 匹配0-9的数字[a-z][A-Z] 匹配a-z A-Z的字母  对比一下的命令输入： 12345678910117  ls -l &#x2F;dev&#x2F;s">
-<meta property="og:type" content="article">
-<meta property="og:title" content="linux学习笔记&#x2F;管道符，重定向和环境变量">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;27&#x2F;linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0&#x2F;%E7%AE%A1%E9%81%93%E7%AC%A6%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F&#x2F;index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="管道符，重定向和环境变量 命令行的通配符：如果只记得文件开头的几个字母，可以遍历查找以这几个字开头的文件，则就可已缩小文件的浏览范围，快速找到要找的文件。 通配符： 1234* 空值或者无限? 单个字符（只匹配一个字符，不能是空值，也不能是多个[0-9] 匹配0-9的数字[a-z][A-Z] 匹配a-z A-Z的字母  对比一下的命令输入： 12345678910117  ls -l &#x2F;dev&#x2F;s">
-<meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-27T02:16:33.645Z">
-<meta name="twitter:card" content="summary">
+  <title>Hexo</title>
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <!-- stylesheets list from config.yml -->
+    
+      <link rel="stylesheet" href="/css/materialize.min.css">
+    
+      <link rel="stylesheet" href="/css/main.min.css">
+    
   
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+  <style type="text/css">
+      html{
+          font-family: sans-serif;
+          font-weight: 300;
+      }
+      @font-face {
+          font-family: 'Material Icons';
+          font-style: normal;
+          font-weight: 400;
+          src: url(/fonts/MaterialIcons-Regular.eot);
+          src: url(/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+          url(/fonts/MaterialIcons-Regular.woff) format('woff'),
+          url(/fonts/MaterialIcons-Regular.ttf) format('truetype')
+      }
+  </style>
+<link rel="shortcut icon" href="/source/favicon.ico">
 </head>
-
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+<div id="menu-box"><a href="javascript:void(0)" target="_blank" rel="noopener" id="menu" data-activates="slide-out" class="button-collapse menu" ><span class="nav-btn"></span></a></div>
+<div id="menu-outer">
+  <div id="menu-inner">
+      <ul id="slide-out" class="side-nav" >
+    <div class="nav-header"  style="background-image: url(/images/header-bg.png);background-color:#26A69A">
+    <div class="header-box"><img src="/images/header.png" ondragstart="return false;"></div>
+    <p>QingNing</p>
+    <div class="nav-link">
+        
+        <a href="http://example.com" target="_blank"> <div class="link-box twitter"></div></a>
+        
+        
+        <a  href="http://example.com" target="_blank"><div class="link-box github"></div></a>
+        
+        
+        <a href="mailto:http://example.com" target="_blank" rel="noopener"><div class="link-box email"></div></a>
+        
+        
+        <a href="http://example.com" target="_blank"><div class="link-box weibo"></div></a>
+        
+        
+        <a href="http://example.com" target="_blank"> <div class="link-box zhihu"></div></a>
+        
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
+    <div class="nav-search">
+        <form id="search-form"> <!-- 搜索框相关 -->
+            <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索..." class="search form-control" autocomplete="off" autocorrect="off"/>
+            <div class="nav-search-img"><i class="material-icons">search</i></div>
+        </form>
+        <div id="local-search-result"></div> <!-- 搜索结果区 -->
+        <p class='no-result'>无搜索结果</p>
     </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-linux学习笔记/管道符，重定向和环境变量" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/11/27/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%AE%A1%E9%81%93%E7%AC%A6%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" class="article-date">
-  <time datetime="2019-11-27T03:10:36.092Z" itemprop="datePublished">2019-11-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      linux学习笔记/管道符，重定向和环境变量
-    </h1>
-  
+</div>
+    <!--Homepage-->
 
-      </header>
+<li class="nav-list">
+    <a href="/" target="_self">
+        <div class="nav-ico"><i class="material-icons">home</i> </div><p>主页</p>
+    </a>
+</li>
+
+<!--archives-->
+
+<li class="nav-list dropdown-btn">
+    <a  class=""  target="_self">
+        <div class="nav-ico"><i class="material-icons">assignment</i></div><p>归档</p><div class="dropdown-ico"><i class="material-icons">arrow_drop_down</i></div>
+    </a>
+</li>
+
+<ul class="dropdown-menu dropdown" >
+    <li class="nav-dropdown-list">
+        <a class="archive-link" href="/archives/2019/11/">November 2019<span class="archive-count">3</span></a>
+    </li>
+</ul>
+<!--categories-->
+
+<ul class="dropdown-menu dropdown" >
+    <li class="nav-dropdown-list">
+        
+    </li>
+</ul>
+<!--tags-->
+
+<li class="nav-list">
+    <a href="/archives" target="_self">
+        <div class="nav-ico"><i class="material-icons">bookmark</i> </div><p>标签</p>
+    </a>
+</li>
+
+<!--photo-->
+
+<!--friends-->
+
+<!--about-->
+
+
+</ul>
+
+  </div>
+</div>
+
+<div id="content-outer">
+  <div id="content-inner">
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>管道符，重定向和环境变量</p>
+<article id="post">
+  <div class="post-page-title"  style="background-color:#26A69A;background-image:url(/images/random/vateral-14.png)" >
+  <h2>linux学习笔记/管道符，重定向和环境变量</h2>
+    
+  <p>作者:QingNing &nbsp&nbsp 发布于:<time datetime="2019-11-27T03:10:36.092Z">
+          2019-11-27
+    </time>
+  </p>
+    
+  </div>
+  <div class="post-page-content">
+  <p>管道符，重定向和环境变量</p>
 <p>命令行的通配符：如果只记得文件开头的几个字母，可以遍历查找以这几个字开头的文件，则就可已缩小文件的浏览范围，快速找到要找的文件。</p>
 <p>通配符：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* 空值或者无限</span><br><span class="line">? 单个字符（只匹配一个字符，不能是空值，也不能是多个</span><br><span class="line">[0-9] 匹配0-9的数字</span><br><span class="line">[a-z][A-Z] 匹配a-z A-Z的字母</span><br></pre></td></tr></table></figure>
@@ -100,89 +145,75 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br></pre></td><td class="code"><pre><span class="line">  1  mail</span><br><span class="line">    2  mail -s "Readme" root@linuxpro.com &lt;&lt; over</span><br><span class="line">    3  I think linux is very practical</span><br><span class="line">    4  I hope to learn more</span><br><span class="line">    5  can you teach me?</span><br><span class="line">    6  over</span><br><span class="line">   </span><br><span class="line">   15  PRICE=5</span><br><span class="line">   16  echo $PRICE </span><br><span class="line">   17  echo "Price is $PRICE"</span><br><span class="line">   18  echo "Price is \$$PRICE"</span><br><span class="line">   19  echo 'uname -a'</span><br><span class="line">   20  echo `uname -a`</span><br><span class="line">   21  uname -a</span><br><span class="line">   22  echo `ls -a`</span><br><span class="line">   23  echo `ls -a /`</span><br><span class="line">   24  echo `$PRICE`</span><br><span class="line">   25  echo 5</span><br><span class="line">   26  `5`</span><br><span class="line">   27  `ls`</span><br><span class="line">   28  shutdown now</span><br><span class="line">   29  sudo shutdown -now</span><br><span class="line">   30  su root</span><br><span class="line">   31  suroot</span><br><span class="line">   32  su root</span><br><span class="line">   33  echo $HOME</span><br><span class="line">   34  exit</span><br><span class="line">   35  cd $WORKDIR</span><br><span class="line">   36  echo $WORKDIR</span><br><span class="line">   37  exit</span><br><span class="line">   38  pwd</span><br><span class="line">   39  cd $WORKDIR</span><br><span class="line">   40  exit</span><br><span class="line">   41  cd $WORKDIR</span><br><span class="line">   42  echo $WORKDIR</span><br><span class="line">   43  pwd</span><br><span class="line">   44  exit</span><br><span class="line">   45  cd ~</span><br><span class="line">   46  pwd</span><br><span class="line">   47  ls</span><br><span class="line">   48  su root</span><br><span class="line">   49  su root</span><br><span class="line">   50  su root</span><br><span class="line">   51  reboot</span><br><span class="line">   52  reboot</span><br><span class="line">   53  history</span><br><span class="line">[linuxpro@linuxpro Desktop]$ su root</span><br><span class="line">Password: </span><br><span class="line">[root@linuxpro Desktop]# history</span><br><span class="line">    1  cd ~</span><br><span class="line">    2  ll</span><br><span class="line">    3  man bash &gt; readme.txt</span><br><span class="line">    4  ll</span><br><span class="line">    5  cat readme.txt </span><br><span class="line">    6  echo "hello everyone" &gt; readme.txt </span><br><span class="line">    7  cat  readme.txt </span><br><span class="line">    8  echo "quality linux learning materials" &gt;&gt; readme.txt </span><br><span class="line">    9  cat readme.txt </span><br><span class="line">   10  ll linuxprobe</span><br><span class="line">   11  ll linuxpro</span><br><span class="line">   12  ll</span><br><span class="line">   13  ls -l linuxpro</span><br><span class="line">   14  mkdir linuxpro</span><br><span class="line">   15  ll</span><br><span class="line">   16  ls -l linuxpro</span><br><span class="line">   17  ls </span><br><span class="line">   18  ls -l</span><br><span class="line">   19  ls -l &gt; xiaoyun</span><br><span class="line">   20  ll</span><br><span class="line">   21  cat xiaoyun</span><br><span class="line">   22  file xiaoyun </span><br><span class="line">   23  ls -l &gt; xiaoyun</span><br><span class="line">   24  ls -l &gt; xiaoyun</span><br><span class="line">   25  ls -l &gt; xiaoyun</span><br><span class="line">   26  cat xiao</span><br><span class="line">   27  cat xiaoyun </span><br><span class="line">   28  echo "nihao1" &gt; xiaoyun </span><br><span class="line">   29  cat xiaoyun </span><br><span class="line">   30  uptime </span><br><span class="line">   31  uptime &gt; xiaoyun </span><br><span class="line">   32  cat  xiaoyun </span><br><span class="line">   33  uptime &gt; xiaoyun </span><br><span class="line">   34  uptime &gt; xiaoyun </span><br><span class="line">   35  uptime &gt; xiaoyun </span><br><span class="line">   36  cat xiaoyun </span><br><span class="line">   37  uptime &gt;&gt; xiaoyun </span><br><span class="line">   38  uptime &gt;&gt; xiaoyun </span><br><span class="line">   39  uptime &gt;&gt; xiaoyun </span><br><span class="line">   40  uptime &gt;&gt; xiaoyun </span><br><span class="line">   41  cat xiaoyun </span><br><span class="line">   42  uptime &gt; &gt; xiaoyun </span><br><span class="line">   43  cat xiaoyun </span><br><span class="line">   44  ls -l haha</span><br><span class="line">   45  ls -l haha &gt; xiaolian.txt</span><br><span class="line">   46  ls -l haha 2&gt; xiaolian.txt</span><br><span class="line">   47  ll</span><br><span class="line">   48  cat xiaolian.txt </span><br><span class="line">   49  ls -l &gt;&gt; xiaoliu 2&gt;&amp;1</span><br><span class="line">   50  ll</span><br><span class="line">   51  cat xiaoliu</span><br><span class="line">   52  echo "nihao" &gt;&gt; xiaoliu 2&gt;&amp;1</span><br><span class="line">   53  cat xiaoliu</span><br><span class="line">   54  echo "nihao" &gt;&gt; xiaoliu 2&gt;&amp;1&gt;</span><br><span class="line">   55  echo "nihao" &gt;&gt; xiaoliu 2&gt;&amp;1</span><br><span class="line">   56  echo "nihao" &gt;&gt; xiaoliu 1&amp;2&gt;</span><br><span class="line">   57  echo "nihao" &gt;&gt; xiaoliu 1&amp;2&gt;</span><br><span class="line">   58  echo "nihao" &gt;&gt; xiaoliu 1&gt;&amp;2</span><br><span class="line">   59  cat xiaoliu </span><br><span class="line">   60  echo "nihao" &gt;&gt; xiaoliu 1&gt;&amp;2</span><br><span class="line">   61  cat xiaoliu </span><br><span class="line">   62  echo "nihao" &gt;&gt; xiaoliu 1&gt;&amp;2</span><br><span class="line">   63  cat xiaoliu </span><br><span class="line">   64  echo "nihao" &gt;&gt; xiaoliu 2&gt;&amp;1</span><br><span class="line">   65  cat xiaoliu </span><br><span class="line">   66  ls -l </span><br><span class="line">   67  ls | wc -l</span><br><span class="line">   68  ls -l &gt;&gt; directs.txt</span><br><span class="line">   69  ll</span><br><span class="line">   70  cat -n directs.txt </span><br><span class="line">   71  ls -al</span><br><span class="line">   72  ll</span><br><span class="line">   73  rm demo*</span><br><span class="line">   74  ll</span><br><span class="line">   75  rm -rf directs.txt </span><br><span class="line">   76  rm -rf xiao*</span><br><span class="line">   77  ll</span><br><span class="line">   78  rm readme.txt </span><br><span class="line">   79  rm -rf test01.tar </span><br><span class="line">   80  ll</span><br><span class="line">   81  ls -l | wc -l</span><br><span class="line">   82  cat /etc/passwd</span><br><span class="line">   83  cat /etc/passwd</span><br><span class="line">   84  grep /sbin/nologin </span><br><span class="line">   85  grep /sbin/nologin  /etc/passwd</span><br><span class="line">   86  grep /sbin/nologin  /etc/passwd | wc -l</span><br><span class="line">   87  echo xiaolang</span><br><span class="line">   88  echo "xiaolang"</span><br><span class="line">   89  echo "xiaolang" | passwd --stdin linuxpro</span><br><span class="line">   90  echo "redhat" | passwd --stdin linuxpro</span><br><span class="line">   91  ls -l linuxpro</span><br><span class="line">   92  ll</span><br><span class="line">   93  ls -l xxxxxxxx</span><br><span class="line">   94  ls -l xxxxxxxx linuxpro/demo.txt 2&gt;&amp;1</span><br><span class="line">   95  ls -l xxxxxxxx 2&gt;&gt; linuxpro/demo.txt </span><br><span class="line">   96  cat linuxpro/demo.txt </span><br><span class="line">   97  ls -l xxxxxxxx &gt;&gt; linuxpro/demo.txt </span><br><span class="line">   98  ls -l  Music  &gt;&gt; linuxpro/demo.txt </span><br><span class="line">   99  cat linuxpro/demo.txt </span><br><span class="line">  100  ls -l xxxxxxxx &gt;&gt; linuxpro/demo.txt 2&gt;&amp;1</span><br><span class="line">  101  cat linuxpro/demo.txt </span><br><span class="line">  102  cat linuxpro/demo.txt </span><br><span class="line">  103  wc -l &lt; linuxpro/demo.txt </span><br><span class="line">  104  wc -l linuxpro/demo.txt </span><br><span class="line">  105  grep "/sbin/nologin" /etc/passwd | wc -l</span><br><span class="line">  106  grep "/sbin/nologin" /etc/passwd | wc -l</span><br><span class="line">  107  grep "/sbin/nologin" /etc/passwd | ls -a</span><br><span class="line">  108  ls -a</span><br><span class="line">  109  grep "/sbin/nologin" /etc/passwd | ls </span><br><span class="line">  110  grep "/sbin/nologin" /etc/passwd | cat -n</span><br><span class="line">  111  cat -n</span><br><span class="line">  112  grep "/sbin/nologin" /etc/passwd | cat -n</span><br><span class="line">  113  ls -l /etc/ | more</span><br><span class="line">  114  ll</span><br><span class="line">  115  echo "Content" | mail -s "Subject" linuxpro</span><br><span class="line">  116  su - linuxpro</span><br><span class="line">  117  man bash</span><br><span class="line">  118  ll</span><br><span class="line">  119  cd ~</span><br><span class="line">  120  ll</span><br><span class="line">  121  dd if=initial-setup-ks.cfg of=demo_test count=1 bs=500M</span><br><span class="line">  122  ll</span><br><span class="line">  123  cat initial-setup-ks.cfg </span><br><span class="line">  124  cat demo_test </span><br><span class="line">  125  file demo_test </span><br><span class="line">  126  rm -f demo_test </span><br><span class="line">  127  ll</span><br><span class="line">  128  dd if=initial-setup-ks.cfg of=demo01 count=1 bs=100M</span><br><span class="line">  129  tar -cxvf demo.tar demo01 </span><br><span class="line">  130  tar -czvf demo.tar demo01 </span><br><span class="line">  131  ll</span><br><span class="line">  132  cat demo.tar </span><br><span class="line">  133  tar xzvf demo.tar </span><br><span class="line">  134  ll</span><br><span class="line">  135  tar xzvf demo.tar demo</span><br><span class="line">  136  tar xzvf demo demo.tar</span><br><span class="line">  137  ll</span><br><span class="line">  138  rm -rf demo01 </span><br><span class="line">  139  ll</span><br><span class="line">  140  tar -xzvf demo.tar </span><br><span class="line">  141  ll</span><br><span class="line">  142  cat demo01 </span><br><span class="line">  143  tar cjvf demo01 </span><br><span class="line">  144  tar cjvf demo01 demo.tar.bzip2</span><br><span class="line">  145  ll</span><br><span class="line">  146  ll</span><br><span class="line">  147  tar cjvf demo01.tar.bzip2 demo01 </span><br><span class="line">  148  ll</span><br><span class="line">  149  cat demo01</span><br><span class="line">  150  cat demo01</span><br><span class="line">  151  tar xzvf demo.tar </span><br><span class="line">  152  cat demo01</span><br><span class="line">  153  tar xzvf demo01.tar.bzip2 </span><br><span class="line">  154  cat demo01</span><br><span class="line">  155  tar xjvf demo01.tar.bzip2 </span><br><span class="line">  156  cat demo01</span><br><span class="line">  157  ll</span><br><span class="line">  158  tar -xzvf demo.tar </span><br><span class="line">  159  cat demo01</span><br><span class="line">  160  tar -cjvf test01.tar demo01</span><br><span class="line">  161  cat demo01</span><br><span class="line">  162  ll</span><br><span class="line">  163  rm demo01</span><br><span class="line">  164  ll</span><br><span class="line">  165  tar -xjvf demo01.tar.bzip2 </span><br><span class="line">  166  ll</span><br><span class="line">  167  more -n demo01</span><br><span class="line">  168  tail -n 10 demo01</span><br><span class="line">  169  cat demo01</span><br><span class="line">  170  ll</span><br><span class="line">  171  cat demo01</span><br><span class="line">  172  tar -xjvf demo01.tar.bzip2 </span><br><span class="line">  173  cat demo01</span><br><span class="line">  174  rm -f demo01</span><br><span class="line">  175  ll</span><br><span class="line">  176  rm demo.tar </span><br><span class="line">  177  ll</span><br><span class="line">  178  tar -xjvf demo01.tar.bzip2 </span><br><span class="line">  179  ll</span><br><span class="line">  180  cat demo01</span><br><span class="line">  181  tar -xvf demo01.tar.bzip2 </span><br><span class="line">  182  cat demo01</span><br><span class="line">  183  ll</span><br><span class="line">  184  rm -rf demo*</span><br><span class="line">  185  ll</span><br><span class="line">  186  cp initial-setup-ks.cfg demo</span><br><span class="line">  187  ll</span><br><span class="line">  188  tar -cjvf demo.gzip demo </span><br><span class="line">  189  ll</span><br><span class="line">  190  cat demo</span><br><span class="line">  191  cat demo</span><br><span class="line">  192  ll</span><br><span class="line">  193  cat demo</span><br><span class="line">  194  ll</span><br><span class="line">  195  tar -xjvf demo.gzip </span><br><span class="line">  196  cat demo</span><br><span class="line">  197  del demo</span><br><span class="line">  198  rm -f demo</span><br><span class="line">  199  ll</span><br><span class="line">  200  cat demo</span><br><span class="line">  201  tar -xjvf demo.gzip </span><br><span class="line">  202  ll</span><br><span class="line">  203  cat demo</span><br><span class="line">  204  rm -f  demo</span><br><span class="line">  205  ll</span><br><span class="line">  206  tar -xvf demo.gzip </span><br><span class="line">  207  cat demo</span><br><span class="line">  208  find /etc/ -name "host*" -print</span><br><span class="line">  209  find / -perm -4000 -print</span><br><span class="line">  210  find / -user linuxpro -exec cp -a &#123;&#125; /root/findresults/ ;</span><br><span class="line">  211  find / -user linuxpro </span><br><span class="line">  212  find / -user linuxpro -exec cp -a &#123;&#125; /root/findresults/ \;</span><br><span class="line">  213  ll</span><br><span class="line">  214  pwd</span><br><span class="line">  215  mkdir</span><br><span class="line">  216  mkdir findresults</span><br><span class="line">  217  ll</span><br><span class="line">  218  cd findresults/</span><br><span class="line">  219  ll</span><br><span class="line">  220  file extensions/</span><br><span class="line">  221  cd extensions/</span><br><span class="line">  222  ll</span><br><span class="line">  223  cd ../plugins/</span><br><span class="line">  224  ll</span><br><span class="line">  225  ll</span><br><span class="line">  226  cd ..</span><br><span class="line">  227  ll</span><br><span class="line">  228  rm -rf *</span><br><span class="line">  229  ll</span><br><span class="line">  230  find / -user linuxpro -exec cp -a &#123;&#125; /root/findresults/ \;</span><br><span class="line">  231  ll</span><br><span class="line">  232  exit</span><br><span class="line">  233  exit`</span><br><span class="line">  234  ;</span><br><span class="line">  235  ~</span><br><span class="line">  236  cd ~</span><br><span class="line">  237  ll</span><br><span class="line">  238  ls</span><br><span class="line">  239  rm anaconda-ks.cfg </span><br><span class="line">  240  ls</span><br><span class="line">  241  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  242  ll</span><br><span class="line">  243  ls</span><br><span class="line">  244  rm test.cfg </span><br><span class="line">  245  alias rm</span><br><span class="line">  246  rm test.cfg </span><br><span class="line">  247  alias rm </span><br><span class="line">  248  unalias rm</span><br><span class="line">  249  alias rm</span><br><span class="line">  250  alias rm -i</span><br><span class="line">  251  alias rm</span><br><span class="line">  252  rm test.cfg </span><br><span class="line">  253  ls</span><br><span class="line">  254  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  255  ls</span><br><span class="line">  256  alias rm='rm -i'</span><br><span class="line">  257  alias rm</span><br><span class="line">  258  rm test.cfg </span><br><span class="line">  259  ls</span><br><span class="line">  260  rm test.cfg </span><br><span class="line">  261  ls</span><br><span class="line">  262  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  263  ls</span><br><span class="line">  264  rm -i test.cfg </span><br><span class="line">  265  ls</span><br><span class="line">  266  type rm</span><br><span class="line">  267  type rm -i</span><br><span class="line">  268  type alias </span><br><span class="line">  269  echo $PATH</span><br><span class="line">  270  PATH=$PATH:/root/bin</span><br><span class="line">  271  echo $PATH</span><br><span class="line">  272  echo $HOME</span><br><span class="line">  273  su -linuxpro</span><br><span class="line">  274  su - linuxpro</span><br><span class="line">  275  mkdir /home/workdir</span><br><span class="line">  276  WORKDIR=/home/workdir</span><br><span class="line">  277  cd $WORKDIR</span><br><span class="line">  278  PWD</span><br><span class="line">  279  pwd</span><br><span class="line">  280  su linuxprobe</span><br><span class="line">  281  su linuxpro</span><br><span class="line">  282  export WORKDIR</span><br><span class="line">  283  su linuxpro</span><br><span class="line">  284  cd ~</span><br><span class="line">  285  su linuxpor</span><br><span class="line">  286  su linuxpro</span><br><span class="line">  287  cd Desktop/</span><br><span class="line">  288  ll</span><br><span class="line">  289  ls -al</span><br><span class="line">  290  vim practice.txt</span><br><span class="line">  291  cat practice.txt </span><br><span class="line">  292  vim practice.txt </span><br><span class="line">  293  cat practice.txt </span><br><span class="line">  294  vim practice.txt </span><br><span class="line">  295  vim practice.txt </span><br><span class="line">  296  cat /etc/hostname </span><br><span class="line">  297  vim /etc/hostname </span><br><span class="line">  298  hostname</span><br><span class="line">  299  cat /etc/sysconfig/</span><br><span class="line">  300  ll /etc/sysconfig/</span><br><span class="line">  301  cat /etc/sysconfig/network-scripts/</span><br><span class="line">  302  cd  /etc/sysconfig/network-scripts/</span><br><span class="line">  303  lsl</span><br><span class="line">  304  ls</span><br><span class="line">  305  cat ifcfg-eno16777736 </span><br><span class="line">  306  cp ifcfg-eno16777736 ifcfg-eno16777736-bak</span><br><span class="line">  307  ll</span><br><span class="line">  308  cat ifcfg-eno16777736-bak </span><br><span class="line">  309  echo "TYPE=Ethernet" ifcfg-eno16777736</span><br><span class="line">  310  cat ifcfg-eno16777736</span><br><span class="line">  311  echo "TYPE=Ethernet" &gt; ifcfg-eno16777736</span><br><span class="line">  312  cat ifcfg-eno16777736</span><br><span class="line">  313  cat "BOOTPROTO=static" &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  314   echo  "BOOTPROTO=static" &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  315  echo "</span><br><span class="line">  316  NAME=eno16777736</span><br><span class="line">  317  ONBOOT=yes</span><br><span class="line">  318  IPADDR=192.168.10.10</span><br><span class="line">  319  NETMASK=255.255.255.0</span><br><span class="line">  320  GATEWAY=192.168.10.1</span><br><span class="line">  321  DNS1=192.168.10.1</span><br><span class="line">  322  &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  323  ;</span><br><span class="line">  324  /</span><br><span class="line">  325  \</span><br><span class="line">  326  " &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  327  cat ifcfg-eno16777736</span><br><span class="line">  328  vim ifcfg-eno16777736</span><br><span class="line">  329  cat ifcfg-eno16777736</span><br><span class="line">  330  systemctl restart network</span><br><span class="line">  331  ping 192.168.10.10</span><br><span class="line">  332  cd /etc/yum.repos.d/</span><br><span class="line">  333  ll</span><br><span class="line">  334  cd ..</span><br><span class="line">  335  ll</span><br><span class="line">  336  cd yum.repos.d/</span><br><span class="line">  337  ll</span><br><span class="line">  338  vim rhel7.repo</span><br><span class="line">  339  cat rhel7.repo </span><br><span class="line">  340  mkdir -p /media/cdrom</span><br><span class="line">  341  mount /dev/cdrom /media/cdrom</span><br><span class="line">  342  vim /etc/fstab </span><br><span class="line">  343  yum install httpd</span><br><span class="line">  344  ll</span><br><span class="line">  345  cd ~</span><br><span class="line">  346  ll</span><br><span class="line">  347  echo $SHELL</span><br><span class="line">  348  vim example.sh</span><br><span class="line">  349  bash example.sh </span><br><span class="line">  350  sh example.sh </span><br><span class="line">  351  bash example.sh </span><br><span class="line">  352  sh ./example.sh </span><br><span class="line">  353  sh example.sh </span><br><span class="line">  354  ll</span><br><span class="line">  355  cd Desktop/</span><br><span class="line">  356  ll</span><br><span class="line">  357  sh ../example.sh </span><br><span class="line">  358  bash ../example.sh </span><br><span class="line">  359  ../example.sh</span><br><span class="line">  360  ./example.sh</span><br><span class="line">  361  ../example.sh</span><br><span class="line">  362  chmod u+x ../example.sh </span><br><span class="line">  363  ../example.sh </span><br><span class="line">  364  echo "</span><br><span class="line">  365  #! /bin/bash</span><br><span class="line">  366  exit`</span><br><span class="line">  367  ;</span><br><span class="line">  368  ~</span><br><span class="line">  369  cd ~</span><br><span class="line">  370  ll</span><br><span class="line">  371  ls</span><br><span class="line">  372  rm anaconda-ks.cfg </span><br><span class="line">  373  ls</span><br><span class="line">  374  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  375  ll</span><br><span class="line">  376  ls</span><br><span class="line">  377  rm test.cfg </span><br><span class="line">  378  alias rm</span><br><span class="line">  379  rm test.cfg </span><br><span class="line">  380  alias rm </span><br><span class="line">  381  unalias rm</span><br><span class="line">  382  alias rm</span><br><span class="line">  383  alias rm -i</span><br><span class="line">  384  alias rm</span><br><span class="line">  385  rm test.cfg </span><br><span class="line">  386  ls</span><br><span class="line">  387  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  388  ls</span><br><span class="line">  389  alias rm='rm -i'</span><br><span class="line">  390  alias rm</span><br><span class="line">  391  rm test.cfg </span><br><span class="line">  392  ls</span><br><span class="line">  393  rm test.cfg </span><br><span class="line">  394  ls</span><br><span class="line">  395  cp initial-setup-ks.cfg test.cfg</span><br><span class="line">  396  ls</span><br><span class="line">  397  rm -i test.cfg </span><br><span class="line">  398  ls</span><br><span class="line">  399  type rm</span><br><span class="line">  400  type rm -i</span><br><span class="line">  401  type alias </span><br><span class="line">  402  echo $PATH</span><br><span class="line">  403  PATH=$PATH:/root/bin</span><br><span class="line">  404  echo $PATH</span><br><span class="line">  405  echo $HOME</span><br><span class="line">  406  su -linuxpro</span><br><span class="line">  407  su - linuxpro</span><br><span class="line">  408  mkdir /home/workdir</span><br><span class="line">  409  WORKDIR=/home/workdir</span><br><span class="line">  410  cd $WORKDIR</span><br><span class="line">  411  PWD</span><br><span class="line">  412  pwd</span><br><span class="line">  413  su linuxprobe</span><br><span class="line">  414  su linuxpro</span><br><span class="line">  415  export WORKDIR</span><br><span class="line">  416  su linuxpro</span><br><span class="line">  417  cd ~</span><br><span class="line">  418  su linuxpor</span><br><span class="line">  419  su linuxpro</span><br><span class="line">  420  cd Desktop/</span><br><span class="line">  421  ll</span><br><span class="line">  422  ls -al</span><br><span class="line">  423  vim practice.txt</span><br><span class="line">  424  cat practice.txt </span><br><span class="line">  425  vim practice.txt </span><br><span class="line">  426  cat practice.txt </span><br><span class="line">  427  vim practice.txt </span><br><span class="line">  428  vim practice.txt </span><br><span class="line">  429  cat /etc/hostname </span><br><span class="line">  430  vim /etc/hostname </span><br><span class="line">  431  hostname</span><br><span class="line">  432  cat /etc/sysconfig/</span><br><span class="line">  433  ll /etc/sysconfig/</span><br><span class="line">  434  cat /etc/sysconfig/network-scripts/</span><br><span class="line">  435  cd  /etc/sysconfig/network-scripts/</span><br><span class="line">  436  lsl</span><br><span class="line">  437  ls</span><br><span class="line">  438  cat ifcfg-eno16777736 </span><br><span class="line">  439  cp ifcfg-eno16777736 ifcfg-eno16777736-bak</span><br><span class="line">  440  ll</span><br><span class="line">  441  cat ifcfg-eno16777736-bak </span><br><span class="line">  442  echo "TYPE=Ethernet" ifcfg-eno16777736</span><br><span class="line">  443  cat ifcfg-eno16777736</span><br><span class="line">  444  echo "TYPE=Ethernet" &gt; ifcfg-eno16777736</span><br><span class="line">  445  cat ifcfg-eno16777736</span><br><span class="line">  446  cat "BOOTPROTO=static" &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  447   echo  "BOOTPROTO=static" &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  448  echo "</span><br><span class="line">  449  NAME=eno16777736</span><br><span class="line">  450  ONBOOT=yes</span><br><span class="line">  451  IPADDR=192.168.10.10</span><br><span class="line">  452  NETMASK=255.255.255.0</span><br><span class="line">  453  GATEWAY=192.168.10.1</span><br><span class="line">  454  DNS1=192.168.10.1</span><br><span class="line">  455  &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  456  ;</span><br><span class="line">  457  /</span><br><span class="line">  458  \</span><br><span class="line">  459  " &gt;&gt; ifcfg-eno16777736</span><br><span class="line">  460  cat ifcfg-eno16777736</span><br><span class="line">  461  vim ifcfg-eno16777736</span><br><span class="line">  462  cat ifcfg-eno16777736</span><br><span class="line">  463  systemctl restart network</span><br><span class="line">  464  ping 192.168.10.10</span><br><span class="line">  465  cd /etc/yum.repos.d/</span><br><span class="line">  466  ll</span><br><span class="line">  467  cd ..</span><br><span class="line">  468  ll</span><br><span class="line">  469  cd yum.repos.d/</span><br><span class="line">  470  ll</span><br><span class="line">  471  vim rhel7.repo</span><br><span class="line">  472  cat rhel7.repo </span><br><span class="line">  473  mkdir -p /media/cdrom</span><br><span class="line">  474  mount /dev/cdrom /media/cdrom</span><br><span class="line">  475  vim /etc/fstab </span><br><span class="line">  476  yum install httpd</span><br><span class="line">  477  ll</span><br><span class="line">  478  cd ~</span><br><span class="line">  479  ll</span><br><span class="line">  480  echo $SHELL</span><br><span class="line">  481  vim example.sh</span><br><span class="line">  482  bash example.sh </span><br><span class="line">  483  sh example.sh </span><br><span class="line">  484  bash example.sh </span><br><span class="line">  485  sh ./example.sh </span><br><span class="line">  486  sh example.sh </span><br><span class="line">  487  ll</span><br><span class="line">  488  cd Desktop/</span><br><span class="line">  489  ll</span><br><span class="line">  490  sh ../example.sh </span><br><span class="line">  491  bash ../example.sh </span><br><span class="line">  492  ../example.sh</span><br><span class="line">  493  ./example.sh</span><br><span class="line">  494  ../example.sh</span><br><span class="line">  495  chmod u+x ../example.sh </span><br><span class="line">  496  ../example.sh </span><br><span class="line">  497  echo "</span><br><span class="line">  498  #! /bin/bash</span><br><span class="line">  499  history</span><br></pre></td></tr></table></figure>
 
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/11/27/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%AE%A1%E9%81%93%E7%AC%A6%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-id="ck3gptfxq0000sgo06zhu4ohv" class="article-share-link">Share</a>
-      
-      
-    </footer>
   </div>
-  
+  <!--评论块-->
     
-  
+
 </article>
-
-</section>
-        
-          <aside id="sidebar">
-  
+<nav class="post-nav">
+  <!-- Prev Nav -->
+    
+  <a href="/2019/11/27/hello-world/" id="post_nav-newer" class="post-nav-content prev-content">
+      新篇
+  </a>
     
 
-  
-    
 
-  
+  <!-- Next Nav -->
     
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/11/27/linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%AE%A1%E9%81%93%E7%AC%A6%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">linux学习笔记/管道符，重定向和环境变量</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
 </nav>
+<div class="post-toc-btn"><i class="material-icons">format_list_numbered</i></div>
+<div class="post-toc-none"><p>(无)</p></div>
+<div class="post-toc-box">
     
+</div>
+<!--<div class="post-back"><i class="material-icons">arrow_back</i></div>-->
+<script type="text/javascript">
+    menu();
+</script>
+  </div>
+</div>
+<div id="bottom-outer">
+  <div id="bottom-inner">
+    <a  id="top-button" onfocus="this.blur();"><div class="up upinbody" style="background-color:#26A69A"><i class="material-icons material-up">vertical_align_top</i></div></a>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
+<p style="line-height: 45px">Copyright ©  2017  Hexo</p>
+<p style="line-height: 45px">Powered by <a href="https://hexo.io/" target="_blank"> Hexo </a> && Theme - <a href="https://github.com/moumao/hexo-theme-Vateral" target="_blank">Vateral</a></p>
 
   </div>
+</div>
+
+<!--影集界面需要的资源-->
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="/js/jquery-3.1.1.min.js"></script>
+
+<script src="/js/materialize.min.js"></script>
+
+<script src="/js/main.min.js"></script>
+
+
+<script>
+    NProgress.start();
+    NProgress.done();
+    lazy();
+    links();
+    window.onpopstate = menu();
+    //pjax操作
+    $(document).pjax('a:not(.nopjax)', '#content-inner', {fragment:'#content-inner', timeout:8000});
+    $(document).on('pjax:start', NProgress.start).on('pjax:end', NProgress.done)
+        .on('pjax:end', () => {
+            dowmdiv();
+            lazy();
+            toc();
+            links();
+            menu();
+        });
+</script>
+
 </body>
 </html>
